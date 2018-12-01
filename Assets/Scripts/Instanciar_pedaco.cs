@@ -9,6 +9,9 @@ public class Instanciar_pedaco : MonoBehaviour {
     public GameObject rim;
     public GameObject intestino;
     public GameObject jogador;
+
+    public GameObject Fantasma;
+
     public int cont;
     public bool desprender;
 
@@ -22,16 +25,17 @@ public class Instanciar_pedaco : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
+        Fantasma = GameObject.Find("inimigo");
 
         cont = 0;
         desprender = true;
         array_orgaos = new GameObject[5];
-        
-        coracao = GameObject.Find("coracao");
-        pulmao = GameObject.Find("pulmao");
-        figado = GameObject.Find("figado");
-        rim = GameObject.Find("rim");
-        intestino = GameObject.Find("intestino");
+
+        rim = GameObject.Find("piece");
+        figado = GameObject.Find("piece (1)");
+        pulmao = GameObject.Find("piece (2)");
+        intestino = GameObject.Find("piece (3)");
+        coracao = GameObject.Find("piece (4)");
         jogador = GameObject.Find("player");
         Iniciar_array();
     }
@@ -47,6 +51,7 @@ public class Instanciar_pedaco : MonoBehaviour {
             if (desprender)
             {
                 array_orgaos[cont].GetComponent<orgao>().enabled = false;
+                Fantasma.GetComponent<Enemy_follow>().SetPieces(array_orgaos[cont], cont);
                 array_orgaos[cont] = null;
                 cont++;
             }
@@ -63,15 +68,15 @@ public class Instanciar_pedaco : MonoBehaviour {
     public void Iniciar_array()
     {
         
-        array_orgaos[0] = Instantiate(GameObject.Find("rim"), jogador.GetComponent<Transform>().position, jogador.GetComponent<Transform>().rotation);
+        array_orgaos[0] = Instantiate(GameObject.Find("piece"), jogador.GetComponent<Transform>().position, jogador.GetComponent<Transform>().rotation);
         
-        array_orgaos[1] = Instantiate(GameObject.Find("pulmao"), jogador.GetComponent<Transform>().position, jogador.GetComponent<Transform>().rotation);
+        array_orgaos[1] = Instantiate(GameObject.Find("piece (1)"), jogador.GetComponent<Transform>().position, jogador.GetComponent<Transform>().rotation);
         
-        array_orgaos[2] = Instantiate(GameObject.Find("figado"), jogador.GetComponent<Transform>().position, jogador.GetComponent<Transform>().rotation);
+        array_orgaos[2] = Instantiate(GameObject.Find("piece (2)"), jogador.GetComponent<Transform>().position, jogador.GetComponent<Transform>().rotation);
        
-        array_orgaos[3] = Instantiate(GameObject.Find("intestino"), jogador.GetComponent<Transform>().position, jogador.GetComponent<Transform>().rotation);
+        array_orgaos[3] = Instantiate(GameObject.Find("piece (3)"), jogador.GetComponent<Transform>().position, jogador.GetComponent<Transform>().rotation);
         
-        array_orgaos[4] = Instantiate(GameObject.Find("coracao"), jogador.GetComponent<Transform>().position, jogador.GetComponent<Transform>().rotation);
+        array_orgaos[4] = Instantiate(GameObject.Find("piece (4)"), jogador.GetComponent<Transform>().position, jogador.GetComponent<Transform>().rotation);
        
     }
     //DESATIVA SCRIPTS DOS PREFABS

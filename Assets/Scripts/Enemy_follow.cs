@@ -164,7 +164,7 @@ public class Enemy_follow : MonoBehaviour {
         return estado;
     }
 
-    void SetPieces(GameObject p,int tipo)
+   public void SetPieces(GameObject p,int tipo)
     {
         pieces[tipo] = p;
     }

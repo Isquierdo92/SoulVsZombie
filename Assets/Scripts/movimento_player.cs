@@ -11,10 +11,11 @@ public class movimento_player : MonoBehaviour {
     public GameObject elevator;
     public bool teleporte;
     public bool recarregar;
+    public bool chave;
 
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         //PEGA O RIGIDBODY DO PROPRIO OBJETO COMO REFERENCIA
         rg = gameObject.GetComponent<Rigidbody>();
         //SETA O CHAO COMO TRUE, PARA TESTAR O PULO
@@ -114,6 +115,12 @@ public class movimento_player : MonoBehaviour {
     }
 
 
+    public void Pegar_chave(GameObject x)
+    {
+        Destroy(x);
+        chave = true;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         
@@ -126,7 +133,15 @@ public class movimento_player : MonoBehaviour {
         {
             recarregar = true;
         }
-
+       if(other.name == "chave")
+        {
+            GameObject key = GameObject.Find(other.name);
+            Pegar_chave(key);
+        }
+        if(other.name == "inimigo")
+        {
+            gameObject.GetComponent<Vivo_player>().esta_vivo = false;
+        }
     }
     private void OnTriggerExit(Collider other)
     {
