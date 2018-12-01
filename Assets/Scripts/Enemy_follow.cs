@@ -5,6 +5,7 @@ using UnityEngine;
 public class Enemy_follow : MonoBehaviour {
 
     public GameObject pers;
+    public GameObject pie;
 
     enum status { seguiplay, seguipiece, comepiece, preso };
 
@@ -28,6 +29,8 @@ public class Enemy_follow : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+        Test();
+
         switch (estado)
         {
             //seguir player
@@ -39,7 +42,7 @@ public class Enemy_follow : MonoBehaviour {
             //seguir pedaço
             case 1:
                 {
-                   // estado = FollowPlayer(estado);
+                    estado = FollowPiece(estado);
                 }
                 break;
             //comendo
@@ -72,6 +75,11 @@ public class Enemy_follow : MonoBehaviour {
 
     int FollowPiece(int estado)
     {
+        transform.LookAt(pie.transform.position);
+        //zerar angulos nao desejados
+        transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y, 0);
+        //andar para frente
+        transform.Translate(new Vector3(0, 0, 1 * Time.deltaTime));
         return estado;
     }
 
@@ -88,5 +96,22 @@ public class Enemy_follow : MonoBehaviour {
     void Colidiu()
     {
 
+    }
+
+    void SetEstado(int est)
+    {
+        estado = est;
+    }
+
+    void Test()
+    {
+        if(Input.GetKey("a"))
+        {
+            estado = 1;
+        }
+        else if (Input.GetKey("b"))
+        {
+            estado = 0;
+        }
     }
 }
