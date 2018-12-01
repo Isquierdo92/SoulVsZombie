@@ -47,17 +47,17 @@ public class Enemy_follow : MonoBehaviour {
     void Start () {
         //pers = GameObject.Find
         // estado = seguiplay;
-        estado = 1; // começa seguindo o player
+        estado = 0; // começa seguindo o player
                     // pie = null;
 
         //só pra testar a fila
 
         pieces = new GameObject[5];
-        pieces[0] = pie1;
-        pieces[1] = pie2;
-        pieces[2] = pie3;
-        pieces[3] = pie4;
-        pieces[4] = pie5;
+        //pieces[0] = pie1;
+        //pieces[1] = pie2;
+        //pieces[2] = pie3;
+        //pieces[3] = pie4;
+        //pieces[4] = pie5;
                
     }
 
@@ -179,13 +179,14 @@ public class Enemy_follow : MonoBehaviour {
             print("Tempo: " + Tempo);
             print("Tempo comendo: " + TempoComendo);
 
-            estado = 0;
+            
 
             // Comido = true;
             if (pie != null)
             {
                 Destroy(pie);
                 PodePega = true;
+                estado = 0;
             }
             Tempo = 0;
 
@@ -210,20 +211,34 @@ public class Enemy_follow : MonoBehaviour {
 
     void Test()
     {
-        if(Input.GetKey("a"))
+        if(Input.GetKey("1"))
         {
-           
-            if(pieces[ke] != null)
-            {
-                pie = pieces[ke];
-            }
-            
-            ke++;
+
+            //if(pieces[ke] != null)
+            //{
+            //    pie = pieces[ke];
+            //}
+
+            //ke++;
+
+            SetPieces(pie1, 0);
 
         }
-        else if (Input.GetKey("b"))
+        else if (Input.GetKey("2"))
         {
-            estado = 0;
+            SetPieces(pie2, 1);
+        }
+        else if (Input.GetKey("3"))
+        {
+            SetPieces(pie3, 2);
+        }
+        else if (Input.GetKey("4"))
+        {
+            SetPieces(pie4, 3);
+        }
+        else if (Input.GetKey("5"))
+        {
+            SetPieces(pie5, 4);
         }
     }
 
@@ -241,6 +256,10 @@ public class Enemy_follow : MonoBehaviour {
                     PodePega = false;
                     estado = 1;//perseguir pedaco
                     break;
+                }
+                else
+                {
+                    estado = 0;
                 }
             }
            
