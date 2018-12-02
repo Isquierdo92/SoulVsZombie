@@ -18,24 +18,37 @@ public class Instanciar_pedaco : MonoBehaviour {
     public float mudar_vel;
     public float mudar_pulo;
 
+    public bool comeco;
+
+    public int org = 5;
+    
+
 
     //ARRAY PARA INSTANTIATE
     public GameObject[] array_orgaos;
 
-	// Use this for initialization
-	void Start () {
-
-        Fantasma = GameObject.Find("inimigo");
-
-        cont = 0;
-        desprender = true;
+    private void Awake()
+    {
         array_orgaos = new GameObject[5];
+
+        org = GameObject.Find("Dificuldade").GetComponent<ManyOrgao>().dif;
 
         rim = GameObject.Find("piece");
         figado = GameObject.Find("piece (1)");
         pulmao = GameObject.Find("piece (2)");
         intestino = GameObject.Find("piece (3)");
         coracao = GameObject.Find("piece (4)");
+        Desativar_script();
+    }
+
+    // Use this for initialization
+    void Start () {
+
+        Fantasma = GameObject.Find("inimigo");
+
+        cont = 0;
+        desprender = true;
+        
         jogador = GameObject.Find("player");
         Iniciar_array();
     }
@@ -43,25 +56,32 @@ public class Instanciar_pedaco : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyUp("space"))
+        if(comeco)
         {
-            Debug.Log("ativou");
-            Debug.Log(cont.ToString());
-
-            if (desprender)
+            if (Input.GetKeyUp("space"))
             {
-                array_orgaos[cont].GetComponent<orgao>().enabled = false;
-                Fantasma.GetComponent<Enemy_follow>().SetPieces(array_orgaos[cont], cont);
-                array_orgaos[cont] = null;
-                cont++;
+                Debug.Log("ativou");
+                Debug.Log(cont.ToString());
+
+                if (desprender)
+                {
+                    array_orgaos[cont].GetComponent<orgao>().enabled = false;
+                    array_orgaos[cont].GetComponent<MeshRenderer>().enabled = true;
+                    array_orgaos[cont].transform.position += new Vector3(0.0f, 2.5f, 0.0f);
+                    Fantasma.GetComponent<Enemy_follow>().SetPieces(array_orgaos[cont], cont);
+                    array_orgaos[cont] = null;
+                    cont++;
+                    jogador.GetComponent<movimento_player>().AumentarVel(mudar_vel);
+                }
             }
+            if (cont >= org)
+            {
+                desprender = false;
+            }
+            if (cont < org)
+                desprender = true;
         }
-        if(cont >= 5)
-        {
-            desprender = false;
-        }
-        if (cont < 5)
-            desprender = true;
+       
       
     }
 
@@ -69,24 +89,29 @@ public class Instanciar_pedaco : MonoBehaviour {
     {
         
         array_orgaos[0] = Instantiate(GameObject.Find("piece"), jogador.GetComponent<Transform>().position, jogador.GetComponent<Transform>().rotation);
-        
+        array_orgaos[0].GetComponent<MeshRenderer>().enabled = false;
         array_orgaos[1] = Instantiate(GameObject.Find("piece (1)"), jogador.GetComponent<Transform>().position, jogador.GetComponent<Transform>().rotation);
-        
+        array_orgaos[1].GetComponent<MeshRenderer>().enabled = false;
         array_orgaos[2] = Instantiate(GameObject.Find("piece (2)"), jogador.GetComponent<Transform>().position, jogador.GetComponent<Transform>().rotation);
-       
+        array_orgaos[2].GetComponent<MeshRenderer>().enabled = false;
         array_orgaos[3] = Instantiate(GameObject.Find("piece (3)"), jogador.GetComponent<Transform>().position, jogador.GetComponent<Transform>().rotation);
-        
+        array_orgaos[3].GetComponent<MeshRenderer>().enabled = false;
         array_orgaos[4] = Instantiate(GameObject.Find("piece (4)"), jogador.GetComponent<Transform>().position, jogador.GetComponent<Transform>().rotation);
-       
+        array_orgaos[4].GetComponent<MeshRenderer>().enabled = false;
     }
     //DESATIVA SCRIPTS DOS PREFABS
     public void Desativar_script()
     {
-        pulmao.GetComponent<orgao>().enabled = false;
-        rim.GetComponent<orgao>().enabled = false;
-        figado.GetComponent<orgao>().enabled = false;
-        intestino.GetComponent<orgao>().enabled = false;
-        coracao.GetComponent<orgao>().enabled = false;
+        
+        pulmao.GetComponent<MeshRenderer>().enabled = false;
+        
+        rim.GetComponent<MeshRenderer>().enabled = false;
+       
+        figado.GetComponent<MeshRenderer>().enabled = false;
+        
+        intestino.GetComponent<MeshRenderer>().enabled = false;
+        
+        coracao.GetComponent<MeshRenderer>().enabled = false;
     }
 }
 

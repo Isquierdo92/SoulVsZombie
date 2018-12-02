@@ -14,6 +14,8 @@ public class Enemy_follow : MonoBehaviour {
     public GameObject pie4; // pedaço
     public GameObject pie5;
 
+    public AudioSource audio;
+
    // enum status { seguiplay, seguipiece, comepiece, preso }; // enum q não to usando pq deu ruim sla
 
 
@@ -22,7 +24,7 @@ public class Enemy_follow : MonoBehaviour {
 
     public float distancia_piece; // distancia para o pedaço
 
-    bool Comido = false,test = true;
+    public bool Comido = false,test = true,vivo = false;
 
     float Tempo =0; // tempo de comer
     public float TempoComendo = 5;
@@ -51,6 +53,9 @@ public class Enemy_follow : MonoBehaviour {
                     // pie = null;
 
         //só pra testar a fila
+        pers = GameObject.Find("player");
+
+        audio = GameObject.Find("Som_enemy").GetComponent<AudioSource>();
 
         pieces = new GameObject[5];
         //pieces[0] = pie1;
@@ -77,50 +82,55 @@ public class Enemy_follow : MonoBehaviour {
 
         
 
-        Test();//tirar isso depois
+        //Test();//tirar isso depois
 
-        TemPedaco();
-
-
-        switch (estado)
+        if (vivo)
         {
+            TemPedaco();
 
-            //seguir player
-            case 0:
-                {
 
-                    print("follow player");
-                    estado = FollowPlayer(estado);
-                }
-                break;
-            //seguir pedaço
-            case 1:
-                {
-                    print("follow piece");
-                    estado = FollowPiece(estado,pie);
-                }
-                break;
-            //comendo
-            case 2:
-                {
-                    print("eat piece");
-                    //if(!Comido) //pie.
-                    if (pie != null)
+            switch (estado)
+            {
+
+                //seguir player
+                case 0:
                     {
-                        FollowPiece(estado, pie);
+
+                        print("follow player");
+                        estado = FollowPlayer(estado);
                     }
-                }
+                    break;
+                //seguir pedaço
+                case 1:
+                    {
+                        print("follow piece");
+                        estado = FollowPiece(estado, pie);
+                    }
+                    break;
+                //comendo
+                case 2:
+                    {
+                        print("eat piece");
+                        //if(!Comido) //pie.
+                        if (pie != null)
+                        {
+                            FollowPiece(estado, pie);
+                        }
+                    }
 
-                break;
-            //morto
-            case 3:
-                {
+                    break;
+                //morto
+                case 3:
+                    {
 
-                }
-                break;
+                    }
+                    break;
 
 
+            }
         }
+
+       
     }
 
     int FollowPlayer(int estado)
@@ -173,6 +183,11 @@ public class Enemy_follow : MonoBehaviour {
     {
         //Debug.Log("funfou caraioo");
         Tempo += Time.deltaTime;
+
+        if (!audio.isPlaying)
+        {
+            audio.Play();
+        }
 
         if (Tempo > TempoComendo)
         {

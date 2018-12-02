@@ -15,7 +15,9 @@ public class Vivo_player : MonoBehaviour {
 	void Update () {
         if (!esta_vivo)
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            //Application.LoadLevel("Game Over");
+            SceneManager.LoadScene("Game Over");
         }
 	}
 }

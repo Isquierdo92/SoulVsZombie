@@ -12,7 +12,7 @@ public class Seguir_player : MonoBehaviour {
         //REFERENCIA DO PLAYER
         seguir = GameObject.Find("player");
         //SETANDO O Z
-        posicao = new Vector3(0.0f, 0.0f, -20.0f);
+        posicao = new Vector3(0.0f, 5.0f, -30.0f);
 	}
 	
 	// Update is called once per frame

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class movimento_player : MonoBehaviour {
 
@@ -8,15 +9,24 @@ public class movimento_player : MonoBehaviour {
     public Rigidbody rg;
   
     public float jump;
-    bool chao;
+    public  bool chao;
     public GameObject elevator;
     public bool teleporte;
     public bool recarregar;
     public bool chave;
 
-    public Vector3 movimento;
-    public float gravidade = 5;
+    bool comeco = false;
 
+    public float direcao;
+
+    public Vector3 movimento;
+    public float gravidade = 10;
+    public Animator anim;
+    public CharacterController cc;
+
+    public AudioSource som;
+
+    bool rotate = false;
 
     // Use this for initialization
     void Start () {
@@ -25,6 +35,8 @@ public class movimento_player : MonoBehaviour {
         //SETA O CHAO COMO TRUE, PARA TESTAR O PULO
         chao = true;
         recarregar = false;
+        direcao = 1.0f;
+        som = gameObject.GetComponentInChildren<AudioSource>();
 
         //SETAR O DRAG, QUANTO MAIOR O DRAG MAIOR A LENTIDÃO QUE O OBJETO RECEBE E NÃO DESLIZA
         //rg.GetComponent<Rigidbody>().drag = 1.5f;
@@ -32,59 +44,123 @@ public class movimento_player : MonoBehaviour {
         //SETA VELOCIDADE DE MOVIMENTO EM X
         velocidade = 7.0f;
         //FORCA PARA O PULO, TEM QUE SER ALTA
-        jump = 1200.0f;
+        jump = 33.0f;
 
         teleporte = false;
-	}
-	
-	// Update is called once per frame
-	void Update () {
+        anim = this.GetComponent<Animator>();
 
-        if (GetComponent<CharacterController>().isGrounded)
+        cc = this.GetComponent<CharacterController>();
+	}
+
+    private void Update()
+    {
+        if(movimento.y < -5)
         {
-            movimento.y = 0;//gravidade * Time.deltaTime;
+            movimento.y = -5;
+        }
+    }
+
+    // Update is called once per frame
+    void FixedUpdate() {
+
+
+
+
+        if (cc.isGrounded)
+        {
+
             chao = true;
         }
         else
         {
-            movimento.y -= gravidade/2 * Time.deltaTime/2;
+            movimento.y -= gravidade * Time.deltaTime;
+            chao = false;
+
         }
+
+        /*if (chao)
+        {
+            movimento.y += gravidade / 2 * Time.deltaTime;
+        }
+        else if (!chao)
+        {
+            movimento.y -= gravidade / 2 * Time.deltaTime;
+        }*/
+
 
         movimento.x = Input.GetAxis("Horizontal") * velocidade * Time.deltaTime;
-        GetComponent<CharacterController>().Move(movimento);
-
-
-        if (Input.GetKey("w"))
-        {
-            //SE ESTIVER NO CHAO ELE PODE PULAR
-            if (chao == true)
-            {
-                //ADICIONA A FORÇA EM Y PARA PULO
-                // rg.AddForce(0.0f, jump * Time.deltaTime, 0.0f, ForceMode.Impulse);
-                movimento.y += 0.32525f;
-            }
-            
-        }
         
-        //SE O Y DO OBJETO FOR MENOR QUE 1 O CHAO VIRA TRUE, ASSIM ELE PODERÁ PULAR
-        if (transform.position.y < 1)
-            chao = true;
-        //CASO CONTRARIO ELE VIRARÁ FALSO E NÃO PODERÁ PULAR
-        else
-        {
-            chao = false;
-        }
-        //SE APERTOU "D" ELE ANDARÁ PARA A DIREITA
-        if (Input.GetKey("d"))
-        {
-           // rg.AddForce(velocidade * Time.deltaTime, 0.0f, 0.0f, ForceMode.Force);
-        }
-        //SE APERTOU A ANDA PARA A ESQUERDA
-        if(Input.GetKey("a"))
-        {
-            //rg.AddForce(-velocidade * Time.deltaTime, 0.0f, 0.0f, ForceMode.Force);
-        }
+        cc.Move(movimento);
+        
 
+
+        //if (Input.GetKey("w"))
+        //{
+        //    //SE ESTIVER NO CHAO ELE PODE PULAR
+        //     if (cc.isGrounded)
+        //    {
+        //        //ADICIONA A FORÇA EM Y PARA PULO
+        //        // rg.AddForce(0.0f, jump * Time.deltaTime, 0.0f, ForceMode.Impulse);
+        //        movimento.y -= gravidade / 2 * Time.deltaTime ;
+        //     //   anim.SetInteger("condicao", 1);
+        //        movimento.y += jump *Time.deltaTime;
+        //       // chao = false;
+        //    }
+
+            
+        //}
+
+        //SE O Y DO OBJETO FOR MENOR QUE 1 O CHAO VIRA TRUE, ASSIM ELE PODERÁ PULAR
+        //if (transform.position.y < 1)
+        //    chao = true;
+        ////CASO CONTRARIO ELE VIRARÁ FALSO E NÃO PODERÁ PULAR
+        //else
+        //{
+        //    chao = false;
+        //}
+        //SE APERTOU "D" ELE ANDARÁ PARA A DIREITA
+        if (Input.GetKeyDown("d"))
+        {
+            
+            if (!som.isPlaying)
+                som.Play();
+           // anim.SetInteger("condicao", 2);
+            // rg.AddForce(velocidade * Time.deltaTime, 0.0f, 0.0f, ForceMode.Force);
+
+            if (rotate)
+            {
+                //this.transform.rotation = transform.Rotate(0.0f,00.0f,00.0f);
+                this.transform.Rotate(new Vector3(0.0f, 180.0f, 0.0f));// = new Quaternion( 0.0f); //89.982f
+                rotate = false;
+                //this.transform.eulerAngles(0.0f,90.0f,0.0f);
+            }
+            anim.SetInteger("Test", 2);
+        } else
+        //SE APERTOU A ANDA PARA A ESQUERDA
+        if (Input.GetKeyDown("a"))
+        {
+            
+            if (!som.isPlaying)
+               som.Play();
+            // anim.SetInteger("condicao", 3);
+            //rg.AddForce(-velocidade * Time.deltaTime, 0.0f, 0.0f, ForceMode.Force);
+
+            //this.transform.rotation = new Quaternion(0.0f, 268.758f, 0.0f, 0.0f);
+
+            if (!rotate)
+            {
+                this.transform.Rotate(new Vector3(0.0f, 180.0f, 0.0f));// = new Quaternion( 0.0f); //89.982f
+                rotate = true;
+            }
+            anim.SetInteger("Test", 1);
+        } else
+            anim.SetInteger("condicao", 0);
+        if (Input.GetKeyUp("a") || Input.GetKeyUp("d"))
+        {
+            som.Stop();
+            anim.SetInteger("Test", 0);
+        }
+            
         if (teleporte)
         {
             Teleportar();
@@ -111,6 +187,11 @@ public class movimento_player : MonoBehaviour {
     {
         velocidade += x;
         
+    }
+
+    public void Zerou_vel(float x)
+    {
+        velocidade -= x * 5;
     }
 
     public void AumentarPulo(float x)
@@ -158,6 +239,18 @@ public class movimento_player : MonoBehaviour {
         if(other.name == "inimigo")
         {
             gameObject.GetComponent<Vivo_player>().esta_vivo = false;
+
+        }
+        if(other.name == "trigger")
+        {
+            GameObject.Find("inimigo").GetComponent<Enemy_follow>().vivo = true;
+            GameObject.Find("player").GetComponent<Instanciar_pedaco>().comeco = true;
+        }
+        if (other.name == "Collider")
+        {
+            GameObject.Find("inimigo").GetComponent<Enemy_follow>().vivo = false;
+            // GameObject.Find("player").GetComponent<Instanciar_pedaco>().comeco = true;
+            Application.LoadLevel("Vitoria");
         }
     }
     private void OnTriggerExit(Collider other)
