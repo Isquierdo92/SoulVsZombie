@@ -12,7 +12,7 @@ public class orgao : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         transform.position = seguir.GetComponent<Transform>().position;
-
+        //transform.Rotate(0, 1, 1);
     }
 
   

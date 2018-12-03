@@ -42,7 +42,7 @@ public class movimento_player : MonoBehaviour {
 
         if (GetComponent<CharacterController>().isGrounded)
         {
-            movimento.y = 0;//gravidade * Time.deltaTime;
+            movimento.y += gravidade * Time.deltaTime;
             chao = true;
         }
         else
